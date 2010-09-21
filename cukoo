@@ -1,0 +1,14 @@
+#!/bin/zsh
+ME=$(/bin/basename "$0")
+
+TARGET="/opt/${ME}"
+
+if [ ! -x "${TARGET}/bin/${ME}" ]; then
+	echo "kiwi: no such target '${ME}'." >&2
+	exit 1
+fi
+
+PATH="${TARGET}/bin:${PATH}"		export PATH
+MANPATH="${TARGET}/man:${MANPATH}"	export MANPATH
+
+exec "${TARGET}/bin/${ME}" "$@"
