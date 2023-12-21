@@ -1,0 +1,1 @@
+Like the legendary cukoo bird that takes over the nests of other birds, this "cukoo" script makes adding a new optional package under the standard "/opt/FOO" hierarchy simple as making a single symlink.
