@@ -1,14 +1,37 @@
 #!/bin/zsh
-ME=$(/bin/basename "$0")
+# vim: ai sm noet nu nornu ts=8 sw=8
 
-TARGET="/opt/${ME}"
+# Assuming a tree of optional components:
+#
+# /opt
+# /opt/bin/
+# /opt/bin/cukoo
+# /opt/foo/bin/foo
+#
+# This script allows easy linkage to the "/opt/foo" project
+# by simply creating a sumlink to the "cukoo" scriptlike this:
+#
+# $ ln -s /opt/bin/cukoo /opt/bin/foo
+#
+# This script then determines the name it was run under and:
+#
+# 1) Adds "/opt/foo/bin" to the current ${PATH}
+# 2) Adds "/opt/foo/man" to the current ${MANPATH}
+#
+# Then the real script "/opt/foo/bin/foo" is run in this new
+# per-package environment.  When the "foo" program terminates,
+# the runtime setup is cancelled automatically.
 
-if [ ! -x "${TARGET}/bin/${ME}" ]; then
-	echo "kiwi: no such target '${ME}'." >&2
+CUKOO="${0:t:r}"
+
+TARGET="/opt/${CUKOO}"
+
+if [ ! -x "${TARGET}/bin/${CUKOO}" ]; then
+	echo "kiwi: no such target '${CUKOO}'." >&2
 	exit 1
 fi
 
 PATH="${TARGET}/bin:${PATH}"		export PATH
 MANPATH="${TARGET}/man:${MANPATH}"	export MANPATH
 
-exec "${TARGET}/bin/${ME}" "$@"
+exec "${TARGET}/bin/${CUKOO}" "$@"
